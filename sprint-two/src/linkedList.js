@@ -20,8 +20,24 @@ var makeLinkedList = function(){
       // *** doesn't really matter if using this.tail.next or this.head.next
       //     since the .next simply changes the next property in the closure node
       list.tail.next = node;
-      // THEN reassign the tail to point to the NEW node
+      // assigning new node.prev to the CURRENT node
+      node.prev = list.tail;
+      // THEN reassign the CURRENT tail to point to the NEW node
       list.tail = node;
+    }
+  };
+
+  list.addToHead = function(value) {
+    // very similar consturct to addToTail
+    var node = makeNode(value);
+    if (!list.head) {
+      list.head = node;
+      list.tail = node;
+    } else {
+      // biggest caveat is setting the head.prev to node
+      list.head.prev = node;
+      node.next = list.head;
+      list.head = node;
     }
   };
 
@@ -37,6 +53,18 @@ var makeLinkedList = function(){
       this.head = null;
     }
     // return the deleted head's value
+    return result;
+  };
+
+  list.removeTail = function() {
+    // very similar construct to removeHead
+    var result = list.tail.value;
+    // biggest caveat is reassigning tail to tail.prev
+    if (list.tail.prev) {
+      this.tail = this.tail.prev;
+    } else {
+      this.tail = null;
+    }
     return result;
   };
 
@@ -63,6 +91,8 @@ var makeNode = function(value){
 
   node.value = value;
   node.next = null;
+  //add a prev property for a doubly linked list
+  node.prev = null;
 
   return node;
 };
